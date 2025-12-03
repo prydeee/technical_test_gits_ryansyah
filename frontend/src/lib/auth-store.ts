@@ -20,64 +20,50 @@ export const useAuth = create<AuthStore>((set) => ({
   user: null,
   token: null,
   isLoading: true,
-
+  
   login: async (email: string, password: string) => {
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/login`,
-        {
-          email,
-          password,
-        }
-      )
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        email,
+        password,
+      })
       
       const { user, token } = res.data
-      
-      if (typeof window !== "undefined") {
-        localStorage.setItem("token", token)
-      }
-      
+      localStorage.setItem("token", token)
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+      
       set({ user, token, isLoading: false })
     } catch (error: any) {
-      set({ isLoading: false })
       throw error.response?.data?.message || "Login gagal"
     }
   },
-
+  
   logout: () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token")
-    }
+    localStorage.removeItem("token")
     delete axios.defaults.headers.common["Authorization"]
     set({ user: null, token: null })
   },
-
+  
   checkAuth: async () => {
     if (typeof window === "undefined") {
       set({ isLoading: false })
       return
     }
-
+    
     const token = localStorage.getItem("token")
     
-    if (!token) {
-      set({ user: null, token: null, isLoading: false })
-      return
-    }
-
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-    
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/user`
-      )
-      set({ user: res.data, token, isLoading: false })
-    } catch (error) {
-      if (typeof window !== "undefined") {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+      
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user`)
+        set({ user: res.data, token, isLoading: false })
+      } catch (error) {
         localStorage.removeItem("token")
+        delete axios.defaults.headers.common["Authorization"]
+        set({ user: null, token: null, isLoading: false })
       }
-      delete axios.defaults.headers.common["Authorization"]
+    } else {
       set({ user: null, token: null, isLoading: false })
     }
   },
