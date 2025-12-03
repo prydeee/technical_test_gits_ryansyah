@@ -1,25 +1,18 @@
-"use client"
-
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
-import { useAuth } from "@/lib/auth-store"
-import { useEffect } from "react"
+import  AuthProvider from "@/components/ui/auth-provider"
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { checkAuth } = useAuth()
-
-  useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
-
   return (
     <html lang="en">
       <body>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <Toaster />
       </body>
     </html>
