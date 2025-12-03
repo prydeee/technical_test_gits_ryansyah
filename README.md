@@ -46,7 +46,7 @@ API berjalan di: http://localhost:8000
 Swagger Documentation: http://localhost:8000/api/documentation
 
 Frontend (Next.js)
-```bash
+
 cd frontend
 cp .env.local.example
 # Isi:
