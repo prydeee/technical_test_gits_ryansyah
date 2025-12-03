@@ -1,5 +1,10 @@
 # Katalog Buku – Digital Book Catalog Platform
-**Fullstack Technical Test**  
+**Fullstack Technical Test** 
+
+Demo Aplikasi:
+
+https://drive.google.com/drive/folders/17V_vp39ZNcldTnq2rZlrbRiJeOO3F7DZ?usp=sharing
+
 Laravel 11 API + PostgreSQL + Next.js 14 (App Router) + Shadcn UI + **Swagger Documentation**
 
 ## Tech Stack
@@ -41,8 +46,9 @@ API berjalan di: http://localhost:8000
 Swagger Documentation: http://localhost:8000/api/documentation
 
 Frontend (Next.js)
-Bashcd frontend
-cp .env.example .env.local
+```bash
+cd frontend
+cp .env.local.example
 # Isi:
 NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
 
