@@ -8,17 +8,17 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode
 }) {
-  const { checkAuth } = useAuth()
-  const [mounted, setMounted] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    checkAuth()
-  }, [checkAuth])
+    setIsClient(true)
+  }, [])
 
-  if (!mounted) {
-    return <>{children}</>
-  }
+  useEffect(() => {
+    if (isClient) {
+      useAuth.getState().checkAuth()
+    }
+  }, [isClient])
 
   return <>{children}</>
 }

@@ -11,6 +11,7 @@ type AuthStore = {
   user: User | null
   token: string | null
   isLoading: boolean
+  isInitialized: boolean
   login: (email: string, password: string) => Promise<void>
   logout: () => void
   checkAuth: () => void
@@ -19,7 +20,8 @@ type AuthStore = {
 export const useAuth = create<AuthStore>((set) => ({
   user: null,
   token: null,
-  isLoading: true,
+  isLoading: false,
+  isInitialized: false,
 
   login: async (email: string, password: string) => {
     try {
@@ -51,14 +53,15 @@ export const useAuth = create<AuthStore>((set) => ({
 
   checkAuth: () => {
     if (typeof window === "undefined") {
-      set({ isLoading: false })
       return
     }
+
+    set({ isLoading: true })
 
     const token = localStorage.getItem("token")
 
     if (!token) {
-      set({ user: null, token: null, isLoading: false })
+      set({ user: null, token: null, isLoading: false, isInitialized: true })
       return
     }
 
@@ -67,12 +70,12 @@ export const useAuth = create<AuthStore>((set) => ({
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/user`)
       .then((res) => {
-        set({ user: res.data, token, isLoading: false })
+        set({ user: res.data, token, isLoading: false, isInitialized: true })
       })
       .catch(() => {
         localStorage.removeItem("token")
         delete axios.defaults.headers.common["Authorization"]
-        set({ user: null, token: null, isLoading: false })
+        set({ user: null, token: null, isLoading: false, isInitialized: true })
       })
   },
 }))
