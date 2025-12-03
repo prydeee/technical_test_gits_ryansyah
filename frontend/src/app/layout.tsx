@@ -1,6 +1,6 @@
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
-import  AuthProvider from "@/components/ui/auth-provider"
+import AuthProvider from "@/components/ui/auth-provider"
 
 export default function RootLayout({
   children,
@@ -9,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         <AuthProvider>
           {children}
         </AuthProvider>

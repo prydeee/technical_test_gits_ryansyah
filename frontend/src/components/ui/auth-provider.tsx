@@ -1,24 +1,20 @@
-"use client"
+import "./globals.css"
+import { Toaster } from "@/components/ui/toaster"
+import AuthProvider from "@/components/ui/auth-provider"
 
-import { useAuth } from "@/lib/auth-store"
-import { useEffect, useState } from "react"
-
-export default function AuthProvider({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
-  useEffect(() => {
-    if (isClient) {
-      useAuth.getState().checkAuth()
-    }
-  }, [isClient])
-
-  return <>{children}</>
+  return (
+    <html lang="en">
+      <body suppressHydrationWarning>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+        <Toaster />
+      </body>
+    </html>
+  )
 }
